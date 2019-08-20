@@ -14,7 +14,7 @@ import re
 import numpy as np
 from cytoolz import itertoolz
 from jellyfish import levenshtein_distance as _levenshtein
-from pyemd import emd
+# from pyemd import emd
 import sklearn.feature_extraction
 from sklearn.metrics import pairwise_distances
 
@@ -24,60 +24,62 @@ from . import extract
 
 RE_ALNUM = re.compile(r"[^\W_]+", flags=re.IGNORECASE | re.UNICODE)
 
-
 def word_movers(doc1, doc2, metric="cosine"):
-    """
-    Measure the semantic similarity between two documents using Word Movers
-    Distance.
+    print('not implemented yet')
 
-    Args:
-        doc1 (:class:`spacy.tokens.Doc`)
-        doc2 (:class:`spacy.tokens.Doc`)
-        metric ({"cosine", "euclidean", "l1", "l2", "manhattan"})
+# def word_movers(doc1, doc2, metric="cosine"):
+#     """
+#     Measure the semantic similarity between two documents using Word Movers
+#     Distance.
 
-    Returns:
-        float: Similarity between ``doc1`` and ``doc2`` in the interval [0.0, 1.0],
-        where larger values correspond to more similar documents.
+#     Args:
+#         doc1 (:class:`spacy.tokens.Doc`)
+#         doc2 (:class:`spacy.tokens.Doc`)
+#         metric ({"cosine", "euclidean", "l1", "l2", "manhattan"})
 
-    References:
-        - Ofir Pele and Michael Werman, "A linear time histogram metric for improved
-          SIFT matching," in Computer Vision - ECCV 2008, Marseille, France, 2008.
-        - Ofir Pele and Michael Werman, "Fast and robust earth mover's distances,"
-          in Proc. 2009 IEEE 12th Int. Conf. on Computer Vision, Kyoto, Japan, 2009.
-        - Kusner, Matt J., et al. "From word embeddings to document distances."
-          Proceedings of the 32nd International Conference on Machine Learning
-          (ICML 2015). 2015. http://jmlr.org/proceedings/papers/v37/kusnerb15.pdf
-    """
-    word_idxs = dict()
+#     Returns:
+#         float: Similarity between ``doc1`` and ``doc2`` in the interval [0.0, 1.0],
+#         where larger values correspond to more similar documents.
 
-    n = 0
-    word_vecs = []
-    for word in itertoolz.concatv(extract.words(doc1), extract.words(doc2)):
-        if word.has_vector and word_idxs.setdefault(word.orth, n) == n:
-            word_vecs.append(word.vector)
-            n += 1
-    distance_mat = pairwise_distances(np.array(word_vecs), metric=metric).astype(
-        np.double
-    )
-    distance_mat /= distance_mat.max()
+#     References:
+#         - Ofir Pele and Michael Werman, "A linear time histogram metric for improved
+#           SIFT matching," in Computer Vision - ECCV 2008, Marseille, France, 2008.
+#         - Ofir Pele and Michael Werman, "Fast and robust earth mover's distances,"
+#           in Proc. 2009 IEEE 12th Int. Conf. on Computer Vision, Kyoto, Japan, 2009.
+#         - Kusner, Matt J., et al. "From word embeddings to document distances."
+#           Proceedings of the 32nd International Conference on Machine Learning
+#           (ICML 2015). 2015. http://jmlr.org/proceedings/papers/v37/kusnerb15.pdf
+#     """
+#     word_idxs = dict()
 
-    vec1 = collections.Counter(
-        word_idxs[word.orth] for word in extract.words(doc1) if word.has_vector
-    )
-    vec1 = np.array(
-        [vec1[word_idx] for word_idx in compat.range_(len(word_idxs))]
-    ).astype(np.double)
-    vec1 /= vec1.sum()  # normalize word counts
+#     n = 0
+#     word_vecs = []
+#     for word in itertoolz.concatv(extract.words(doc1), extract.words(doc2)):
+#         if word.has_vector and word_idxs.setdefault(word.orth, n) == n:
+#             word_vecs.append(word.vector)
+#             n += 1
+#     distance_mat = pairwise_distances(np.array(word_vecs), metric=metric).astype(
+#         np.double
+#     )
+#     distance_mat /= distance_mat.max()
 
-    vec2 = collections.Counter(
-        word_idxs[word.orth] for word in extract.words(doc2) if word.has_vector
-    )
-    vec2 = np.array(
-        [vec2[word_idx] for word_idx in compat.range_(len(word_idxs))]
-    ).astype(np.double)
-    vec2 /= vec2.sum()  # normalize word counts
+#     vec1 = collections.Counter(
+#         word_idxs[word.orth] for word in extract.words(doc1) if word.has_vector
+#     )
+#     vec1 = np.array(
+#         [vec1[word_idx] for word_idx in compat.range_(len(word_idxs))]
+#     ).astype(np.double)
+#     vec1 /= vec1.sum()  # normalize word counts
 
-    return 1.0 - emd(vec1, vec2, distance_mat)
+#     vec2 = collections.Counter(
+#         word_idxs[word.orth] for word in extract.words(doc2) if word.has_vector
+#     )
+#     vec2 = np.array(
+#         [vec2[word_idx] for word_idx in compat.range_(len(word_idxs))]
+#     ).astype(np.double)
+#     vec2 /= vec2.sum()  # normalize word counts
+
+#     return 1.0 - emd(vec1, vec2, distance_mat)
 
 
 def word2vec(obj1, obj2):

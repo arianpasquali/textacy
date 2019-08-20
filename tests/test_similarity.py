@@ -23,19 +23,19 @@ def doc_pairs(text_pairs):
     ]
 
 
-class TestWordMovers(object):
+# class TestWordMovers(object):
 
-    def test_metrics(self, doc_pairs):
-        metrics = ("cosine", "l1", "manhattan", "l2", "euclidean")
-        for metric in metrics:
-            for doc1, doc2 in doc_pairs:
-                assert 0.0 <= similarity.word_movers(doc1, doc2, metric=metric) <= 1.0
+#     def test_metrics(self, doc_pairs):
+#         metrics = ("cosine", "l1", "manhattan", "l2", "euclidean")
+#         for metric in metrics:
+#             for doc1, doc2 in doc_pairs:
+#                 assert 0.0 <= similarity.word_movers(doc1, doc2, metric=metric) <= 1.0
 
-    def test_identity(self, doc_pairs):
-        for doc1, doc2 in doc_pairs[:2]:  # HACK
-            print(doc1, doc2)
-            assert similarity.word_movers(doc1, doc1) == pytest.approx(1.0, rel=1e-3)
-            assert similarity.word_movers(doc2, doc2) == pytest.approx(1.0, rel=1e-3)
+#     def test_identity(self, doc_pairs):
+#         for doc1, doc2 in doc_pairs[:2]:  # HACK
+#             print(doc1, doc2)
+#             assert similarity.word_movers(doc1, doc1) == pytest.approx(1.0, rel=1e-3)
+#             assert similarity.word_movers(doc2, doc2) == pytest.approx(1.0, rel=1e-3)
 
 
 class TestWord2Vec(object):
